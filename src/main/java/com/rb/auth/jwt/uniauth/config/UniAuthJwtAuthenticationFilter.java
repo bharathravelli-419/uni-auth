@@ -42,13 +42,12 @@ public class UniAuthJwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String userEmail = uniAuthJwtService.extractUsernameFromJwtToken(jwt);
+            final String username = uniAuthJwtService.extractUsernameFromJwtToken(jwt);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
+            if (username != null && authentication == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 if (uniAuthJwtService.isJwtTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -58,17 +57,16 @@ public class UniAuthJwtAuthenticationFilter extends OncePerRequestFilter {
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                    filterChain.doFilter(request, response);
-                }
-                else{
-                    throw new RuntimeException("TOKEN IS EXPIRED");
-                }
-            }
+                    System.out.println("<--- INSIDE JWT IF "+ username + authentication );
 
+                }
+
+            }
+            filterChain.doFilter(request, response);
 
         } catch (Exception exception) {
-            filterChain.doFilter(request, response);
-//            handlerExceptionResolver.resolveException(request, response, null, exception);
+//            filterChain.doFilter(request, response);
+           throw new RuntimeException("INVALID JWT TOKEN");
         }
     }
 }

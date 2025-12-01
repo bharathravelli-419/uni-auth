@@ -1,15 +1,15 @@
 package com.rb.auth.jwt.uniauth.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class UniAuthRefreshTokenResponse {
+@Builder
+public class UniAuthUpdatePassword {
+
     @NotBlank
-    String newToken;
+    private String existingPassword;
     @NotBlank
-    String refreshToken;
+    private String newPassword;
 }

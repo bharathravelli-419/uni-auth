@@ -18,7 +18,7 @@ import java.util.Map;
 public class UniAuthJwtService {
 
     private String secretKey = "this-is-secret-123456 need to add a lot more characters to a=m make it really really llong";
-    private Long expirationTimeOfToken = 60000L; // in milliseconds
+    private Long expirationTimeOfToken = 6000000L; // in milliseconds
 
 
 

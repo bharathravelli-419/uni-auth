@@ -24,13 +24,12 @@ public class UniAuthRefreshTokenService {
     }
 
 
-    public UniAuthRefreshToken createRefreshToken(String username){
+    public UniAuthRefreshToken createRefreshToken(UniAuthUser uniAuthUser){
 
         UniAuthRefreshToken uniAuthRefreshToken;
-        uniAuthRefreshToken = uniAuthRefreshTokenRepository.findByUsername(username).orElseThrow();
-
-         uniAuthRefreshToken.setUniAuthUser(uniAuthUsersRepository.findByUsername(username).isPresent()?
-                        uniAuthUsersRepository.findByUsername(username).get() : null);
+        uniAuthRefreshToken = uniAuthRefreshTokenRepository.findByUsername(uniAuthUser.getUsername()).orElse( new UniAuthRefreshToken());
+         uniAuthRefreshToken.setUniAuthUser(uniAuthUsersRepository.findByUsername(uniAuthUser.getUsername()).isPresent()?
+                        uniAuthUsersRepository.findByUsername(uniAuthUser.getUsername()).get(): uniAuthUser);
           uniAuthRefreshToken.setToken(UUID.randomUUID().toString());
         uniAuthRefreshToken.setExpiryDate(Instant.now().plusMillis(86400000));
 
